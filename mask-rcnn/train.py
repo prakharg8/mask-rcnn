@@ -1,24 +1,26 @@
 from mmcv import Config
-cfg2 = Config.fromfile('./configs/mask_rcnn/mask_rcnn_r50_caffe_fpn_mstrain-poly_1x_coco.py')
+import mmcv
+import os.path as osp
+cfg2 = Config.fromfile('./configs/mask_rcnn/mask_rcnn_r101_fpn_2x_coco.py')
 
 from mmdet.apis import set_random_seed
 
 cfg2.dataset_type = 'COCODataset'
 
-cfg2.total_epochs = 2
-cfg2.runner['max_epochs'] = 2
+cfg2.total_epochs = 100
+cfg2.runner['max_epochs'] = 100
 
-cfg2.data.test.ann_file = '../drive/MyDrive/5/val/ann_coco.json'
-cfg2.data.test.img_prefix = '../drive/MyDrive/5/input/'
+cfg2.data.test.ann_file = './mask-rcnn/val/ann_coco.json'
+cfg2.data.test.img_prefix = './mask-rcnn/val/images'
 cfg2.data.test.classes = ('panel', 'red_panel',)
 
-cfg2.data.train.ann_file = '../drive/MyDrive/5/train/ann_coco.json'
-cfg2.data.train.img_prefix = '../drive/MyDrive/5/input/'
+cfg2.data.train.ann_file = './mask-rcnn/train/ann_coco.json'
+cfg2.data.train.img_prefix = './mask-rcnn/train/images'
 cfg2.data.train.classes = ('panel', 'red_panel',)
 
 
-cfg2.data.val.ann_file = '../drive/MyDrive/5/val/ann_coco.json'
-cfg2.data.val.img_prefix = '../drive/MyDrive/5/input/'
+cfg2.data.val.ann_file = './mask-rcnn/val/ann_coco.json'
+cfg2.data.val.img_prefix = './mask-rcnn/val/images'
 cfg2.data.val.classes = ('panel', 'red_panel',)
 
 # modify num classes of the model in box head and mask head
@@ -27,7 +29,7 @@ cfg2.model.roi_head.bbox_head.num_classes = 2
 cfg2.model.roi_head.mask_head.num_classes = 2
 
 # We can still use the pre-trained Mask RCNN model to obtain a higher performance
-cfg2.load_from = 'checkpoints/mask_rcnn_r50_caffe_fpn_mstrain-poly_3x_coco_bbox_mAP-0.408__segm_mAP-0.37_20200504_163245-42aa3d00.pth'
+cfg2.load_from = 'checkpoints/mask_rcnn_r101_fpn_2x_coco_bbox_mAP-0.408__segm_mAP-0.366_20200505_071027-14b391c7.pth'
 
 # Set up working dir to save files and logs.
 cfg2.work_dir = './save_files_and_logs'
@@ -41,7 +43,7 @@ cfg2.log_config.interval = 10
 # We can set the evaluation interval to reduce the evaluation times
 cfg2.evaluation.interval = 12
 # We can set the checkpoint saving interval to reduce the storage cost
-cfg2.checkpoint_config.interval = 12
+cfg2.checkpoint_config.interval = 1
 
 # Set seed thus the results are more reproducible
 cfg2.seed = 0
